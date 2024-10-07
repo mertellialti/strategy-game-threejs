@@ -1,20 +1,158 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
+  <!-- <ion-toolbar>
+    <ion-title> Stronghold </ion-title>
+  </ion-toolbar> -->
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+    <ion-toolbar color="light">
+      <ion-grid fixed class="ion-no-padding">
+        <ion-row style="align-items: center">
+          <ion-col size="4" style="text-align: left; float: left">
+            <ion-button
+              expand="block"
+              fill="clear"
+              shape="round"
+              style="text-align: left; float: left"
+            >
+              <ion-icon
+                style="text-align: left; float: left"
+                slot="icon-only"
+                name="list"
+              ></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="4" class="ion-no-padding">
+            <h1>Stronghold</h1>
+          </ion-col>
+          <ion-col size="4">
+            <!-- <img
+              (click)="openModal('castle')"
+              style="
+                border: 0.1px;
+                size: small;
+                border-radius: 100%;
+                width: 70px;
+              "
+              src="assets/icon/king.svg"
+            /> -->
+            <ion-button (click)="modalSrv.openBaseModal()">
+              <ion-icon slot="icon-only" name="home"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <app-scene></app-scene>
+
+  <ion-modal
+    [isOpen]="modalSrv.isModalOpen"
+    [showBackdrop]="false"
+    backdropDismiss="true"
+    (didDismiss)="modalSrv.isModalOpen=false"
+    [initialBreakpoint]="0.5"
+    [breakpoints]="[0, 0.5, 0.75, 1]"
+  >
+    <ng-template>
+      <ion-content>
+        <ion-header>
+          <ion-toolbar> </ion-toolbar>
+        </ion-header>
+
+        <ion-toolbar
+        *ngIf="modalSrv.showMainContent">
+          <ion-segment
+            [(ngModel)]="segmentSelected"
+            (ionChange)="segmentChanged($event)"
+          >
+          <ion-segment-button value="castle">
+            <ion-label>Castle</ion-label>
+          </ion-segment-button>
+            <ion-segment-button value="army">
+              <ion-label>Army</ion-label>
+            </ion-segment-button>     
+            <ion-segment-button value="settlements">
+              <ion-label>Settlements</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="resources">
+              <ion-label>Resources</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-toolbar>
+
+      <div *ngIf="modalSrv.showMainContent">
+        <div *ngIf="segmentSelected=='army'">
+          <swiper-container [slidesPerView]="2" [loop]="true">
+            <swiper-slide>
+              <ion-card>
+                <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+                <ion-card-header>
+                  <ion-card-title>I. Legion</ion-card-title>              
+                </ion-card-header>              
+                <ion-card-content>
+                  Here's a small text description for the card content. Nothing more, nothing less.
+                </ion-card-content>
+              </ion-card>
+            </swiper-slide>
+            <swiper-slide>
+              <ion-card>
+                <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+                <ion-card-header>
+                  <ion-card-title>V. Legion</ion-card-title>              
+                </ion-card-header>          
+                <ion-card-content>
+                  Here's a small text description for the card content. Nothing more, nothing less.
+                </ion-card-content>
+              </ion-card>    
+            </swiper-slide>            
+          </swiper-container>
+        </div>
+        <div *ngIf="segmentSelected=='castle'">             
+          <swiper-container [slidesPerView]="2" [loop]="true">
+            <swiper-slide>
+              <ion-card>
+                <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+                <ion-card-header>
+                  <ion-card-title>Church</ion-card-title>              
+                </ion-card-header>              
+                <ion-card-content>
+                  Here's a small text description for the card content. Nothing more, nothing less.
+                </ion-card-content>
+              </ion-card>
+            </swiper-slide>
+            <swiper-slide>
+              <ion-card>
+                <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+                <ion-card-header>
+                  <ion-card-title>Armory</ion-card-title>              
+                </ion-card-header>          
+                <ion-card-content>
+                  Here's a small text description for the card content. Nothing more, nothing less.
+                </ion-card-content>
+              </ion-card>    
+            </swiper-slide>            
+          </swiper-container>
+        </div>
+      </div>
+
+      <div *ngIf="modalSrv.showSingleContent">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>{{modalSrv.modalContent['buildingType']}}</ion-card-subtitle>
+            <ion-card-title>{{modalSrv.modalContent['name']}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-textarea label="Produces {{modalSrv.modalContent['produces']}}" labelPlacement="stacked" value="{{modalSrv.modalContent['perTurn']}}" readonly="true">              
+              </ion-textarea>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
